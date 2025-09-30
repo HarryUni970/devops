@@ -7,3 +7,6 @@ More sample text
 
 [![Releases](https://img.shields.io/github/release/HarryUni970/devops/all.svg?style=flat-square)](https://github.com/HarryUni970/devops/releases)
 
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/HarryUni970/devops/A_workflow_for_my_Hello_World_App/<branch>?style=flat-square)
+
+
