@@ -4,19 +4,14 @@ import java.sql.*;
 
 public class App
 {
-    private Connection con = null;
+    /**
+     * Connection to MySQL database.
+     */
+    public static Connection con = null;
 
-    public static void main(String[] args)
-    {
-        // Create new Application
-        App a = new App();
-
-        // Connect to database
-        a.connect();
-
-        // Disconnect from database
-        a.disconnect();
-    }
+    /**
+     * Connect to the MySQL database.
+     */
     public void connect()
     {
         try
@@ -73,4 +68,16 @@ public class App
             }
         }
     }
+    public static void main(String[] args)
+    {
+        // Create new Application
+        App a = new App();
+
+        // Connect to database
+        a.connect();
+
+        // Disconnect from database
+        a.disconnect();
+    }
 }
+
