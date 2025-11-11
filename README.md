@@ -1,5 +1,3 @@
-sample text
-More sample text
 
 ![workflow](https://github.com/HarryUni970/devops/actions/workflows/main.yml/badge.svg)
 

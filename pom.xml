@@ -20,7 +20,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.32</version>
+            <version>8.0.18</version>
         </dependency>
 
         <dependency>
@@ -76,6 +76,32 @@
                         <version>5.1.0</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <finalName>devops</finalName>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.napier.devops.App</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <appendassemblyId>false</appendassemblyId>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

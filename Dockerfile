@@ -1,4 +1,4 @@
 FROM amazoncorretto:17
-COPY ./target/seMethods-1.0.3.2-SNAPSHOT-jar-with-dependencies.jar /tmp
+COPY ./target/devops.jar /tmp
 WORKDIR /tmp
-ENTRYPOINT ["java", "-jar", "seMethods-1.0.3.2-SNAPSHOT-jar-with-dependencies.jar"]
+ENTRYPOINT ["java", "-jar", "devops.jar", "db:3306", "30000"]
