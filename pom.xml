@@ -35,30 +35,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.napier.sem.App</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -77,6 +53,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -85,13 +62,13 @@
                     <finalName>devops</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.napier.devops.App</mainClass>
+                            <mainClass>com.napier.sem.App</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
-                        <appendassemblyId>false</appendassemblyId>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <appendassemblyId>false</appendassemblyId>
                 </configuration>
                 <executions>
                     <execution>
