@@ -71,12 +71,15 @@ public class App
             a.connect(args[0], Integer.parseInt(args[1]));
         }
 
-        Department dept = a.getDepartment("Development");
-        ArrayList<Employee> employees = a.getSalariesByDepartment(dept);
+        //Department dept = a.getDepartment("Development");
+        //ArrayList<Employee> employees = a.getSalariesByDepartment(dept);
 
+        Employee emp = a.getEmployee(255530);
+        // Display results
+        a.displayEmployee(emp);
 
         // Print salary report
-        a.printSalaries(employees);
+        //a.printSalaries(employees);
 
         // Disconnect from database
         a.disconnect();
@@ -148,7 +151,7 @@ public class App
                             emp.emp_no, emp.first_name, emp.last_name, emp.salary);
             System.out.println(emp_string);
         }
-    }//////////
+    }/*
     public Department getDepartment(String dept_name)
     {
         try
@@ -186,5 +189,5 @@ public class App
 
         return null;
     }
-
+*/
 }
