@@ -7,4 +7,6 @@
 
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/HarryUni970//test.yml?branch=main)
 
+[![codecov](https://codecov.io/gh/HarryUni970/devops/graph/badge.svg?token=V6R08V3HD4)](https://codecov.io/gh/HarryUni970/devops)
+
 
