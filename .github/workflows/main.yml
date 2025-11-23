@@ -76,7 +76,7 @@ jobs:
           files: |
             ./target/*.
       - name: Copy Output
-        run: docker container cp semethods_app_1:./tmp/reports ./
+        run: docker container cp semethods-app-1:./tmp/reports ./
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
