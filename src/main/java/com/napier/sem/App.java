@@ -70,7 +70,7 @@ public class App
         App app = new App();
 
         if (args.length < 1) {
-            app.connect("localhost:3306", 1000);
+            app.connect("localhost:33060", 1000);
         } else {
             app.connect("db:3306",3000);
         }
