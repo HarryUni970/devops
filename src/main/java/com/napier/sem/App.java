@@ -34,7 +34,7 @@ public class App
                 Thread.sleep(delay);
                 // Connect to database
                 con = DriverManager.getConnection("jdbc:mysql://" + location
-                                + "/employees?allowPublicKeyRetrieval=true&useSSL=false",
+                                + "/world?allowPublicKeyRetrieval=true&useSSL=false",
                         "root", "example");
                 System.out.println("Successfully connected");
                 break;
@@ -67,21 +67,101 @@ public class App
     }
     public static void main(String[] args) {
         // Create new Application and connect to database
-        // Create new Application and connect to database
         App app = new App();
 
         if (args.length < 1) {
-            app.connect("localhost:33060", 0);
+            app.connect("localhost:3306", 1000);
         } else {
-            app.connect(args[0], Integer.parseInt(args[1]));
+            app.connect("db:3306",3000);
         }
 
-        ArrayList<Employee> employees = app.getSalariesByRole("Manager");
-        app.outputEmployees(employees, "ManagerSalaries.md");
+        country CTRY = app.getCountry("KIR");
+        app.displayCountry(CTRY);
+        //ArrayList<Employee> employees = app.getSalariesByRole("Manager");  Keep and change for reports
+        //app.outputEmployees(employees, "ManagerSalaries.md");
 
         // Disconnect from database
         app.disconnect();
     }
+
+    public country getCountry(String code)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Code, Name, Continent, Population, LocalName "
+                            + "FROM country "
+                            + "WHERE Code = '" + code + "'";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new employee if valid.
+            // Check one is returned
+            if (rset.next())
+            {
+                country CTRY = new country();
+                CTRY.Code = rset.getString("Code");
+                CTRY.Name = rset.getString("Name");
+                CTRY.Continent = rset.getString("Continent");
+                CTRY.Population = rset.getInt("Population");
+                CTRY.LocalName = rset.getString("LocalName");
+                return CTRY;
+            }
+            else
+                return null;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+    public void displayCountry(country CTRY)
+    {
+        if (CTRY != null)
+        {
+            System.out.println(
+                    CTRY.Code + " "
+                            + CTRY.Name + " "
+                            + CTRY.Continent + "\n"
+                            + CTRY.Population + "\n"
+                            + CTRY.LocalName + "\n");
+        }
+    }
+
+    public void outputCountries(ArrayList<country> Countries, String filename){
+        // Check Countries is not null
+        if (Countries == null) {
+            System.out.println("No Countries");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        // Print header
+        sb.append("| Emp No | First Name | Last Name | Title | Salary | Department |                    Manager |\r\n");
+        sb.append("| --- | --- | --- | --- | --- | --- | --- |\r\n");
+        // Loop over all employees in the list
+        for (country CTRY : Countries) {
+            if (CTRY == null) continue;
+            sb.append("| " + CTRY.Code + " | " +
+                    CTRY.Name + " | " + CTRY.Continent + " | " +
+                    CTRY.Region + " | " + CTRY.SurfaceArea + " | "
+                    + CTRY.Population + " | " + CTRY.LifeExpectancy + " |\r\n");
+        }
+        try {
+            new File("./reports/").mkdir();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + filename)));
+            writer.write(sb.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
     public Employee getEmployee(int ID)
     {
         try
@@ -229,11 +309,11 @@ public class App
         }
     }
 
-    /**
-     * Outputs to Markdown
-     *
-     * @param employees
-     */
+
+     //Outputs to Markdown
+     //
+     // @param employees
+
     public void outputEmployees(ArrayList<Employee> employees, String filename){
         // Check employees is not null
         if (employees == null) {
@@ -262,7 +342,6 @@ public class App
             e.printStackTrace();
         }
     }
-    /*
     public Department getDepartment(String dept_name)
     {
         try
