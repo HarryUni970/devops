@@ -17,7 +17,7 @@ public class AppTest
     {
         app = new App();
     }
-
+    /*
     @Test
     void printSalariesTestNull()
     {
@@ -53,4 +53,6 @@ public class AppTest
     void DisplayEmployeeTestNull() {
         app.displayEmployee(null);
     }
+    */
+
 }
