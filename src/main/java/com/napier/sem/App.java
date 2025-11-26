@@ -78,9 +78,11 @@ public class App
 
         //country CTRY = app.getCountry("KIR");
         //app.displayCountry(CTRY);
+        //Get the values of a countries population within the world from largest to Smallest
         ArrayList<country> ID1 = app.getCountriesPopulation(0);
+        //Output the value of the countries population
         app.outputCountries(ID1, "1.CountriesPopulationInWorld.md");
-
+        //
         ArrayList<country> ID2 = app.getCountriesPopulationByContinent("Asia",0);
         app.outputCountries(ID2, "2.CountriesPopulationInContinent.md");
 
@@ -152,18 +154,13 @@ public class App
         ArrayList<city> CityReport = app.GetCities();
         app.outputCities(CityReport, " - CityReport.md");
 
-        //ArrayList<country> CountryReport = app.GetCoun();
-        //app.outputCities(CityReport, " - CityReport.md");
+        ArrayList<country> CountryReport = app.GetCountries();
+        app.outputCountries(CountryReport, " - CountryReport.md");
+
+        ArrayList<city> CapitalsReport = app.getCapitals();
+        app.outputCities(CapitalsReport, " - CapitalCityReport.md");
         /*
 
-        ArrayList<city> Cities = app.getCitiesBy("Population");
-        app.outputCities(Cities, "CitiesByPopulation.md");
-
-        ArrayList<city> CapitalCities = app.getCapitalsBy("Population");
-        app.outputCities(CapitalCities, "CapitalCitiesByPopulation.md");
-
-        ArrayList<PopulationReport> Reports = app.getPopulationsBy("NLD");
-        app.outputReport(Reports, "PopulationReport.md");
 */
         // Disconnect from database
         app.disconnect();
@@ -825,28 +822,64 @@ public class App
 
         }
     }
-    public ArrayList<PopulationReport> getPopulationsBy(String Area)
+
+    public ArrayList<country> GetCountries()
     {
         try{
             //Create an SQL statement
             Statement stmt = con.createStatement();
             //create string for SQL statement
+
             String strSelect =
-                    "SELECT\n" +
-                            "    c.Name AS Country,\n" +
-                            "    c.Population AS TotalPopulation,\n" +
-                            "    COALESCE(ci.CityPopulation, 0) AS UrbanPopulation,\n" +
-                            "    ROUND(COALESCE(ci.CityPopulation, 0) / c.Population * 100, 2) AS UrbanPopulationPercentage,\n" +
-                            "    (c.Population - COALESCE(ci.CityPopulation, 0)) AS RuralPopulation,\n" +
-                            "    ROUND((c.Population - COALESCE(ci.CityPopulation, 0)) / c.Population * 100, 2) AS RuralPopulationPercentage\n" +
-                            "FROM country c\n" +
-                            "LEFT JOIN (\n" +
-                            "    SELECT CountryCode, SUM(Population) AS CityPopulation\n" +
-                            "    FROM city\n" +
-                            "    GROUP BY CountryCode\n" +
-                            ") ci ON c.Code = ci.CountryCode\n" +
-                            "WHERE ci.CountryCode = '" + Area +"' " +
-                            "ORDER BY c.Name;\n";
+                    "SELECT Code, Name, Continent, Region, Population, Capital "
+                            + "FROM country ";
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<country> Countries = new ArrayList<>();
+            while (rset.next()) {
+                country CTRY = new country();
+                CTRY.Code = rset.getString("Code");
+                CTRY.Name = rset.getString("Name");
+                CTRY.Continent = rset.getString("Continent");
+                CTRY.Region = rset.getString("Region");
+                CTRY.Population = rset.getInt("Population");
+                CTRY.Capital = rset.getInt("Capital");
+
+                Countries.add(CTRY);
+            }
+            return Countries;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return  null;
+
+        }
+    }
+
+    public ArrayList<PopulationReport> getPopulationsBy()
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+            String strSelect =                     "SELECT" +
+                    "    c.Name AS Country," +
+                    "    c.Population AS TotalPopulation," +
+                    "    COALESCE(ci.CityPopulation, 0) AS UrbanPopulation," +
+                    "    ROUND(COALESCE(ci.CityPopulation, 0) / c.Population * 100, 2) AS UrbanPopulationPercentage," +
+                    "    (c.Population - COALESCE(ci.CityPopulation, 0)) AS RuralPopulation," +
+                    "    ROUND((c.Population - COALESCE(ci.CityPopulation, 0)) / c.Population * 100, 2) AS RuralPopulationPercentage" +
+                    "FROM country c" +
+                    "LEFT JOIN (" +
+                    "    SELECT CountryCode, SUM(Population) AS CityPopulation" +
+                    "    FROM city" +
+                    "    GROUP BY CountryCode" +
+                    ") ci ON c.Code = ci.CountryCode;";
 
 
             //Excexute SQL statement
