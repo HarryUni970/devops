@@ -159,6 +159,10 @@ public class App
 
         ArrayList<city> CapitalsReport = app.getCapitals();
         app.outputCities(CapitalsReport, " - CapitalCityReport.md");
+
+        ArrayList<PopulationReport> PopulationReport = app.getPopulations();
+        app.outputReport(PopulationReport, " - PopulationReport.md");
+
         /*
 
 */
@@ -861,7 +865,7 @@ public class App
         }
     }
 
-    public ArrayList<PopulationReport> getPopulationsBy()
+    public ArrayList<PopulationReport> getPopulations()
     {
         try{
             //Create an SQL statement
