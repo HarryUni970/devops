@@ -1,5 +1,6 @@
 package com.napier.sem;
 
+import javax.swing.plaf.synth.Region;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -77,14 +78,83 @@ public class App
 
         //country CTRY = app.getCountry("KIR");
         //app.displayCountry(CTRY);
-        ArrayList<country> ID1 = app.getCountriesPopulation();
-        app.outputCountries(ID1, "CountriesPopulationInWorld.md");
+        ArrayList<country> ID1 = app.getCountriesPopulation(0);
+        app.outputCountries(ID1, "1.CountriesPopulationInWorld.md");
 
-        ArrayList<country> ID2 = app.getCountriesPopulationByContinent("Asia");
-        app.outputCountries(ID2, "CountriesPopulationInContinent.md");
+        ArrayList<country> ID2 = app.getCountriesPopulationByContinent("Asia",0);
+        app.outputCountries(ID2, "2.CountriesPopulationInContinent.md");
 
-        ArrayList<country> ID3 = app.getCountriesPopulationByRegion("Western Europe");
-        app.outputCountries(ID3, "CountriesPopulationInRegion.md");
+        ArrayList<country> ID3 = app.getCountriesPopulationByRegion("Western Europe",0);
+        app.outputCountries(ID3, "3.CountriesPopulationInRegion.md");
+
+        ArrayList<country> ID4 = app.getCountriesPopulation(5);
+        app.outputCountries(ID4, "4.TopNCountriesPopulationInWorld.md");
+
+        ArrayList<country> ID5 = app.getCountriesPopulationByContinent("Asia",4);
+        app.outputCountries(ID5, "5.TopNCountriesPopulationInContinent.md");
+
+        ArrayList<country> ID6 = app.getCountriesPopulationByRegion("Western Europe",3);
+        app.outputCountries(ID6, "6.TopNCountriesPopulationInRegion.md");
+
+        ArrayList<city> ID7 = app.CitiesByPopulation(0);
+        app.outputCities(ID7, "7.CitiesPopulationInWorld.md");
+
+        ArrayList<city> ID8 = app.CitiesByPopulationInContinent("North America",0);
+        app.outputCities(ID8, "8.CitiesPopulationInContinent.md");
+
+        ArrayList<city> ID9 = app.CitiesByPopulationInRegion("Nordic Countries",0);
+        app.outputCities(ID9, "9.CitiesPopulationInRegion.md");
+
+        ArrayList<city> ID10 = app.CitiesByPopulationInCountry("Italy",0);
+        app.outputCities(ID10, "10.CitiesPopulationInCountry.md");
+
+        ArrayList<city> ID11 = app.CitiesByPopulationInDistrict("Zuid-Holland",0);
+        app.outputCities(ID11, "11.CitiesPopulationInDistrict.md");
+
+        ArrayList<city> ID12 = app.CitiesByPopulation(10);
+        app.outputCities(ID12, "12.TopNCitiesPopulationInWorld.md");
+
+        ArrayList<city> ID13 = app.CitiesByPopulationInContinent("North America",5);
+        app.outputCities(ID13, "13.TopNCitiesPopulationInContinent.md");
+
+        ArrayList<city> ID14 = app.CitiesByPopulationInRegion("Nordic Countries",3);
+        app.outputCities(ID14, "14.TopNCitiesPopulationInRegion.md");
+
+        ArrayList<city> ID15 = app.CitiesByPopulationInCountry("Italy",4);
+        app.outputCities(ID15, "15.TopNCitiesPopulationInCountry.md");
+
+        ArrayList<city> ID16 = app.CitiesByPopulationInDistrict("Zuid-Holland",3);
+        app.outputCities(ID16, "16.TopNCitiesPopulationInDistrict.md");
+
+        long ID26 = app.WorldPopulation();
+        app.OutputPopulation(ID26, "26.TotalWorldPopulation.md", "World Population");
+
+        String continent = "Europe";
+        long ID27 = app.ContinentPopulation(continent);
+        app.OutputPopulation(ID27, "27.TotalContinentPopulation.md",  "Population of " + continent);
+
+        String region = "Micronesia";
+        long ID28 = app.RegionPopulation(region);
+        app.OutputPopulation(ID28, "28.TotalRegionPopulation.md",  "Population of " + region);
+
+        String country = "Germany";
+        long ID29 = app.CountryPopulation(country);
+        app.OutputPopulation(ID29, "29.TotalCountryPopulation.md",  "Population of " + country);
+
+        String district = "Scotland";
+        long ID30 = app.DistrictPopulation(district);
+        app.OutputPopulation(ID30, "30.TotalCountryPopulation.md",  "Population of " + district);
+
+        String City = "Newcastle Upon Tyne";
+        long ID31 = app.CityPopulation(City);
+        app.OutputPopulation(ID31, "31.TotalCountryPopulation.md",  "Population of " + City);
+
+        ArrayList<city> CityReport = app.GetCities();
+        app.outputCities(CityReport, " - CityReport.md");
+
+        //ArrayList<country> CountryReport = app.GetCoun();
+        //app.outputCities(CityReport, " - CityReport.md");
+        /*
 
         ArrayList<city> Cities = app.getCitiesBy("Population");
         app.outputCities(Cities, "CitiesByPopulation.md");
@@ -94,7 +164,7 @@ public class App
 
         ArrayList<PopulationReport> Reports = app.getPopulationsBy("NLD");
         app.outputReport(Reports, "PopulationReport.md");
-
+*/
         // Disconnect from database
         app.disconnect();
     }
@@ -146,17 +216,24 @@ public class App
                             + CTRY.LocalName + "\n");
         }
     }
-    // ID 1
-    public ArrayList<country> getCountriesPopulation()
+    // ID 1 & 4
+    public ArrayList<country> getCountriesPopulation(int N)
     {
         try{
             //Create an SQL statement
             Statement stmt = con.createStatement();
             //create string for SQL statement
+            String limit;
+            if (N > 0) {
+                limit = " LIMIT " +  N + ";";
+
+            }else{
+                limit = "";
+            }
             String strSelect =
                     "SELECT Code, Name, Continent, Region,  Population, Capital "
                             + "FROM country "
-                            + "ORDER BY Population DESC";
+                            + "ORDER BY Population DESC"  + limit ;
             //Excexute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
             // Extract employee information
@@ -182,18 +259,25 @@ public class App
         }
     }
 
-    // ID 2
-    public ArrayList<country> getCountriesPopulationByContinent (String Continent)
+    // ID 2 & 5
+    public ArrayList<country> getCountriesPopulationByContinent (String Continent,int N)
     {
         try{
             //Create an SQL statement
             Statement stmt = con.createStatement();
             //create string for SQL statement
+            String limit;
+            if (N > 0) {
+                limit = " LIMIT " +  N + ";";
+
+            }else{
+                limit = "";
+            }
             String strSelect =
                     "SELECT Code, Name, Continent, Region,  Population, Capital "
                             + "FROM country "
                             + "WHERE Continent = '" + Continent + "'"
-                            + "ORDER BY Population DESC";
+                            + "ORDER BY Population DESC" + limit;
             //Excexute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
             // Extract employee information
@@ -219,18 +303,25 @@ public class App
         }
     }
 
-    // ID 3
-    public ArrayList<country> getCountriesPopulationByRegion (String Region)
+    // ID 3 & 6
+    public ArrayList<country> getCountriesPopulationByRegion (String Region, int N)
     {
         try{
             //Create an SQL statement
             Statement stmt = con.createStatement();
             //create string for SQL statement
+            String limit;
+            if (N > 0) {
+                limit = " LIMIT " +  N + ";";
+
+            }else{
+                limit = "";
+            }
             String strSelect =
                     "SELECT Code, Name, Continent, Region,  Population, Capital "
                             + "FROM country "
                             + "WHERE Region = '" + Region + "'"
-                            + "ORDER BY Population DESC";
+                            + "ORDER BY Population DESC" +  limit;
             //Excexute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
             // Extract employee information
@@ -256,17 +347,25 @@ public class App
         }
     }
 
-
-    public ArrayList<city> getCitiesBy(String Ordering)
+  // ID 7 & 12
+    public ArrayList<city> CitiesByPopulation(int N)
     {
         try{
             //Create an SQL statement
             Statement stmt = con.createStatement();
             //create string for SQL statement
+
+            String limit;
+            if (N > 0) {
+                limit = " LIMIT " +  N + ";";
+
+            }else{
+                limit = "";
+            }
             String strSelect =
                     "SELECT Name, CountryCode, District, Population "
                             + "FROM city "
-                            + "ORDER BY " + Ordering + " DESC";
+                            + "ORDER BY Population DESC" + limit;
 
 
             //Excexute SQL statement
@@ -292,18 +391,27 @@ public class App
         }
     }
 
-    public ArrayList<city> getCapitalsBy(String Ordering)
+    // ID 8 & 13
+    public ArrayList<city> CitiesByPopulationInContinent(String Continent,int N)
     {
         try{
             //Create an SQL statement
             Statement stmt = con.createStatement();
             //create string for SQL statement
+
+            String limit;
+            if (N > 0) {
+                limit = " LIMIT " +  N + ";";
+
+            }else{
+                limit = "";
+            }
             String strSelect =
-                    "SELECT city.Name, city.CountryCode, city.Population "
+                    "SELECT city.Name, city.CountryCode, city.District, city.Population "
                             + "FROM city "
                             + "INNER JOIN country on city.CountryCode = country.Code "
-                            + "WHERE country.capital = city.ID "
-                            + "ORDER BY city." + Ordering + " DESC";
+                            + "WHERE country.Continent = '" + Continent + "'"
+                            + "ORDER BY city.Population DESC" + limit;
 
 
             //Excexute SQL statement
@@ -314,6 +422,396 @@ public class App
                 city CITY = new city();
                 CITY.Name = rset.getString("Name");
                 CITY.CountryCode = rset.getString("CountryCode");
+                CITY.District = rset.getString("District");
+                CITY.Population = rset.getInt("population");
+                Cities.add(CITY);
+            }
+            return Cities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return  null;
+
+        }
+    }
+
+    // ID 9 & 14
+    public ArrayList<city> CitiesByPopulationInRegion(String region,int N)
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String limit;
+            if (N > 0) {
+                limit = " LIMIT " +  N + ";";
+
+            }else{
+                limit = "";
+            }
+            String strSelect =
+                    "SELECT city.Name, city.CountryCode, city.District, city.Population "
+                            + "FROM city "
+                            + "INNER JOIN country on city.CountryCode = country.Code "
+                            + "WHERE country.Region = '" + region + "'"
+                            + "ORDER BY city.Population DESC" + limit;
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<city> Cities = new ArrayList<>();
+            while (rset.next()) {
+                city CITY = new city();
+                CITY.Name = rset.getString("Name");
+                CITY.CountryCode = rset.getString("CountryCode");
+                CITY.District = rset.getString("District");
+                CITY.Population = rset.getInt("population");
+                Cities.add(CITY);
+            }
+            return Cities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return  null;
+
+        }
+    }
+
+
+    // ID 10 & 15
+    public ArrayList<city> CitiesByPopulationInCountry(String Country,int N)
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String limit;
+            if (N > 0) {
+                limit = " LIMIT " +  N + ";";
+
+            }else{
+                limit = "";
+            }
+            String strSelect =
+                    "SELECT city.Name, city.CountryCode, city.District, city.Population "
+                            + "FROM city "
+                            + "INNER JOIN country on city.CountryCode = country.Code "
+                            + "WHERE country.Name = '" + Country + "'"
+                            + "ORDER BY city.Population DESC" + limit;
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<city> Cities = new ArrayList<>();
+            while (rset.next()) {
+                city CITY = new city();
+                CITY.Name = rset.getString("Name");
+                CITY.CountryCode = rset.getString("CountryCode");
+                CITY.District = rset.getString("District");
+                CITY.Population = rset.getInt("population");
+                Cities.add(CITY);
+            }
+            return Cities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return  null;
+
+        }
+    }
+    // ID 11 & 16
+    public ArrayList<city> CitiesByPopulationInDistrict(String District,int N)
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String limit;
+            if (N > 0) {
+                limit = " LIMIT " +  N + ";";
+
+            }else{
+                limit = "";
+            }
+            String strSelect =
+                    "SELECT Name, CountryCode, District, Population "
+                            + "FROM city "
+                            + "WHERE District = '" + District + "'"
+                            + "ORDER BY Population DESC" + limit;
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<city> Cities = new ArrayList<>();
+            while (rset.next()) {
+                city CITY = new city();
+                CITY.Name = rset.getString("Name");
+                CITY.CountryCode = rset.getString("CountryCode");
+                CITY.District = rset.getString("District");
+                CITY.Population = rset.getInt("population");
+                Cities.add(CITY);
+            }
+            return Cities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return  null;
+
+        }
+    }
+
+    //ID 26
+
+    public long WorldPopulation()
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String strSelect =
+                    "SELECT SUM(Population) as WorldPopulation "
+                            + "FROM country;";
+
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            if (rset.next()) {
+                return rset.getLong("WorldPopulation");
+            } else {
+                return 0; // No rows (unlikely)
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get population");
+            return 0;
+        }
+    }
+
+    //ID 27
+
+    public long ContinentPopulation(String Continent)
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String strSelect =
+                    "SELECT SUM(Population) as ContinentPopulation "
+                            + "FROM country "
+                            + "WHERE Continent = '" + Continent + "';";
+
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            if (rset.next()) {
+                return rset.getLong("ContinentPopulation");
+            } else {
+                return 0; // No rows (unlikely)
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get population");
+            return 0;
+        }
+    }
+
+    //ID 28
+
+    public long RegionPopulation(String Region)
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String strSelect =
+                    "SELECT SUM(Population) as RegionPopulation "
+                            + "FROM country "
+                            + "WHERE Region = '" + Region + "';";
+
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            if (rset.next()) {
+                return rset.getLong("RegionPopulation");
+            } else {
+                return 0; // No rows (unlikely)
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get population");
+            return 0;
+        }
+    }
+
+    //ID 29
+
+    public long CountryPopulation(String Country)
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String strSelect =
+                    "SELECT SUM(Population) as CountryPopulation "
+                            + "FROM country "
+                            + "WHERE Name = '" + Country + "';";
+
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            if (rset.next()) {
+                return rset.getLong("CountryPopulation");
+            } else {
+                return 0; // No rows (unlikely)
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get population");
+            return 0;
+        }
+    }
+
+    public long DistrictPopulation(String district)
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String strSelect =
+                    "SELECT SUM(Population) as DistrictPopulation "
+                            + "FROM city "
+                            + "WHERE District = '" + district + "';";
+
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            if (rset.next()) {
+                return rset.getLong("DistrictPopulation");
+            } else {
+                return 0; // No rows (unlikely)
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get population");
+            return 0;
+        }
+    }
+
+    public long CityPopulation(String City)
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String strSelect =
+                    "SELECT SUM(Population) as CityPopulation "
+                            + "FROM city "
+                            + "WHERE Name = '" + City + "';";
+
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            if (rset.next()) {
+                return rset.getLong("CityPopulation");
+            } else {
+                return 0; // No rows (unlikely)
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get population");
+            return 0;
+        }
+    }
+
+
+    public ArrayList<city> getCapitals()
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name, city.CountryCode, city.Population "
+                            + "FROM city "
+                            + "INNER JOIN country on city.CountryCode = country.Code "
+                            + "WHERE country.capital = city.ID; ";
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<city> Cities = new ArrayList<>();
+            while (rset.next()) {
+                city CITY = new city();
+                CITY.Name = rset.getString("Name");
+                CITY.CountryCode = rset.getString("CountryCode");
+                CITY.Population = rset.getInt("population");
+                Cities.add(CITY);
+            }
+            return Cities;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return  null;
+
+        }
+    }
+
+    public ArrayList<city> GetCities()
+    {
+        try{
+            //Create an SQL statement
+            Statement stmt = con.createStatement();
+            //create string for SQL statement
+
+            String strSelect =
+                    "SELECT Name, CountryCode, District, Population "
+                            + "FROM city ";
+
+
+            //Excexute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<city> Cities = new ArrayList<>();
+            while (rset.next()) {
+                city CITY = new city();
+                CITY.Name = rset.getString("Name");
+                CITY.CountryCode = rset.getString("CountryCode");
+                CITY.District = rset.getString("District");
                 CITY.Population = rset.getInt("population");
                 Cities.add(CITY);
             }
@@ -377,18 +875,6 @@ public class App
         }
     }
 
-
-    /*
-            "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary"
-                    + "FROM employees, salaries, titles"
-                    + "WHERE employees.emp_no = salaries.emp_no"
-                    + "AND employees.emp_no = titles.emp_no"
-                    + "AND salaries.to_date = '9999-01-01' "
-                    + "AND titles.to_date = '9999-01-01' "
-                    + "AND titles.title = '" + title + "'"
-                    + "Order BY employees.emp_no ASC";
-
- */
     public void outputCountries(ArrayList<country> Countries, String filename){
         // Check Countries is not null
         if (Countries == null) {
@@ -408,6 +894,25 @@ public class App
                     CTRY.Region + " | " + CTRY.Population + " | "
                     + CTRY.Capital + " |\r\n");
         }
+        try {
+            new File("./reports/").mkdir();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + filename)));
+            writer.write(sb.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void OutputPopulation(Long Population, String filename,String PopulationType){
+        // Check Population is not null
+
+        StringBuilder sb = new StringBuilder();
+        // Print header
+        sb.append("| "+ PopulationType + " |\r\n");
+        sb.append("| --- |\r\n");
+            sb.append("| " + Population + " | |\r\n");
+
         try {
             new File("./reports/").mkdir();
             BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./reports/" + filename)));

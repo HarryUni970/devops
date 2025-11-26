@@ -4,7 +4,6 @@
 -- ------------------------------------------------------
 -- Server version	8.0.19-debug
 
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -4325,7 +4324,7 @@ INSERT INTO `country` VALUES ('NGA','Nigeria','Africa','Western Africa',923768.0
 INSERT INTO `country` VALUES ('NIC','Nicaragua','North America','Central America',130000.00,1838,5074000,68.7,1988.00,2023.00,'Nicaragua','Republic','Arnoldo Alemán Lacayo',2734,'NI');
 INSERT INTO `country` VALUES ('NIU','Niue','Oceania','Polynesia',260.00,NULL,2000,NULL,0.00,NULL,'Niue','Nonmetropolitan Territory of New Zealand','Elisabeth II',2805,'NU');
 INSERT INTO `country` VALUES ('NLD','Netherlands','Europe','Western Europe',41526.00,1581,15864000,78.3,371362.00,360478.00,'Nederland','Constitutional Monarchy','Beatrix',5,'NL');
-INSERT INTO `country` VALUES ('NOR','Norway','Europe','Nordic Countries',323877.00,1905,4478500,78.7,145895.00,153370.00,'Norge','Constitutional Monarchy','Harald V',2807,'NO');
+INSERT INTO `country` VALUES ('NOR','Norway','Europe','GF',323877.00,1905,4478500,78.7,145895.00,153370.00,'Norge','Constitutional Monarchy','Harald V',2807,'NO');
 INSERT INTO `country` VALUES ('NPL','Nepal','Asia','Southern and Central Asia',147181.00,1769,23930000,57.8,4768.00,4837.00,'Nepal','Constitutional Monarchy','Gyanendra Bir Bikram',2729,'NP');
 INSERT INTO `country` VALUES ('NRU','Nauru','Oceania','Micronesia',21.00,1968,12000,60.8,197.00,NULL,'Naoero/Nauru','Republic','Bernard Dowiyogo',2728,'NR');
 INSERT INTO `country` VALUES ('NZL','New Zealand','Oceania','Australia and New Zealand',270534.00,1907,3862000,77.8,54669.00,64960.00,'New Zealand/Aotearoa','Constitutional Monarchy','Elisabeth II',3499,'NZ');
