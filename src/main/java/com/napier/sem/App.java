@@ -23,6 +23,7 @@ public class App
             // Load Database driver
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
+            //Print error mssage
             System.out.println("Could not load SQL driver");
             System.exit(-1);
         }
@@ -40,9 +41,11 @@ public class App
                 System.out.println("Successfully connected");
                 break;
             } catch (SQLException sqle) {
+                //Print error message
                 System.out.println("Failed to connect to database attempt " +                                  Integer.toString(i));
                 System.out.println(sqle.getMessage());
             } catch (InterruptedException ie) {
+                //Print error message
                 System.out.println("Thread interrupted? Should not happen.");
             }
         }
@@ -165,7 +168,7 @@ public class App
 
         /*
 
-*/
+         */
         // Disconnect from database
         app.disconnect();
     }
@@ -218,6 +221,8 @@ public class App
         }
     }
     // ID 1 & 4
+    //Print all countrys from most to least populated in the world
+    //Limit to top N results if N is 0 then ignore
     public ArrayList<country> getCountriesPopulation(int N)
     {
         try{
@@ -261,6 +266,8 @@ public class App
     }
 
     // ID 2 & 5
+    //Print all countrys from most to least populated in the continent
+    //Limit to top N results if N is 0 then ignore
     public ArrayList<country> getCountriesPopulationByContinent (String Continent,int N)
     {
         try{
@@ -305,6 +312,8 @@ public class App
     }
 
     // ID 3 & 6
+    //Print all countrys from most to least populated in the Region
+    //Limit to top N results if N is 0 then ignore
     public ArrayList<country> getCountriesPopulationByRegion (String Region, int N)
     {
         try{
@@ -348,7 +357,9 @@ public class App
         }
     }
 
-  // ID 7 & 12
+    // ID 7 & 12
+    //Print all citys from most to least populated in the world
+    //Limit to top N results if N is 0 then ignore
     public ArrayList<city> CitiesByPopulation(int N)
     {
         try{
@@ -393,6 +404,8 @@ public class App
     }
 
     // ID 8 & 13
+    //Print all citys from most to least populated in the continent
+    //Limit to top N results if N is 0 then ignore
     public ArrayList<city> CitiesByPopulationInContinent(String Continent,int N)
     {
         try{
@@ -439,6 +452,8 @@ public class App
     }
 
     // ID 9 & 14
+    //Print all citys from most to least populated in the region
+    //Limit to top N results if N is 0 then ignore
     public ArrayList<city> CitiesByPopulationInRegion(String region,int N)
     {
         try{
@@ -486,6 +501,8 @@ public class App
 
 
     // ID 10 & 15
+    //Print all citys from most to least populated in the country
+    //Limit to top N results if N is 0 then ignore
     public ArrayList<city> CitiesByPopulationInCountry(String Country,int N)
     {
         try{
@@ -531,6 +548,8 @@ public class App
         }
     }
     // ID 11 & 16
+    //Print all citys from most to least populated in the District
+    //Limit to top N results if N is 0 then ignore
     public ArrayList<city> CitiesByPopulationInDistrict(String District,int N)
     {
         try{
@@ -576,7 +595,7 @@ public class App
     }
 
     //ID 26
-
+    //Print the world population
     public long WorldPopulation()
     {
         try{
@@ -606,7 +625,7 @@ public class App
     }
 
     //ID 27
-
+    //Print one continent when its given by the user
     public long ContinentPopulation(String Continent)
     {
         try{
@@ -668,6 +687,7 @@ public class App
     }
 
     //ID 29
+    //Print one country when country is given by the user
 
     public long CountryPopulation(String Country)
     {
@@ -871,24 +891,25 @@ public class App
             //Create an SQL statement
             Statement stmt = con.createStatement();
             //create string for SQL statement
-            String strSelect =                     "SELECT" +
-                    "    c.Name AS Country," +
-                    "    c.Population AS TotalPopulation," +
-                    "    COALESCE(ci.CityPopulation, 0) AS UrbanPopulation," +
-                    "    ROUND(COALESCE(ci.CityPopulation, 0) / c.Population * 100, 2) AS UrbanPopulationPercentage," +
-                    "    (c.Population - COALESCE(ci.CityPopulation, 0)) AS RuralPopulation," +
-                    "    ROUND((c.Population - COALESCE(ci.CityPopulation, 0)) / c.Population * 100, 2) AS RuralPopulationPercentage" +
-                    "FROM country c" +
-                    "LEFT JOIN (" +
-                    "    SELECT CountryCode, SUM(Population) AS CityPopulation" +
-                    "    FROM city" +
-                    "    GROUP BY CountryCode" +
-                    ") ci ON c.Code = ci.CountryCode;";
+            String strSelect =
+                    "SELECT " +
+                            "    c.Name AS Country, " +
+                            "    c.Population AS TotalPopulation, " +
+                            "    COALESCE(ci.CityPopulation, 0) AS UrbanPopulation, " +
+                            "    ROUND(COALESCE(ci.CityPopulation, 0) / c.Population * 100, 2) AS UrbanPopulationPercentage, " +
+                            "    (c.Population - COALESCE(ci.CityPopulation, 0)) AS RuralPopulation, " +
+                            "    ROUND((c.Population - COALESCE(ci.CityPopulation, 0)) / c.Population * 100, 2) AS RuralPopulationPercentage " +
+                            "FROM country c " +
+                            "LEFT JOIN ( " +
+                            "    SELECT CountryCode, SUM(Population) AS CityPopulation " +
+                            "    FROM city " +
+                            "    GROUP BY CountryCode " +
+                            ") ci ON c.Code = ci.CountryCode;";
 
 
             //Excexute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract employee information
+            // Extract Population information
             ArrayList<PopulationReport> Reports = new ArrayList<>();
             while (rset.next()) {
                 PopulationReport RPRT = new PopulationReport();
@@ -911,7 +932,7 @@ public class App
 
         }
     }
-
+    //output to markdown file for Country class
     public void outputCountries(ArrayList<country> Countries, String filename){
         // Check Countries is not null
         if (Countries == null) {
@@ -940,7 +961,7 @@ public class App
             e.printStackTrace();
         }
     }
-
+    //output to markdown file for Population class
     public void OutputPopulation(Long Population, String filename,String PopulationType){
         // Check Population is not null
 
@@ -948,7 +969,7 @@ public class App
         // Print header
         sb.append("| "+ PopulationType + " |\r\n");
         sb.append("| --- |\r\n");
-            sb.append("| " + Population + " | |\r\n");
+        sb.append("| " + Population + " | |\r\n");
 
         try {
             new File("./reports/").mkdir();
@@ -959,7 +980,7 @@ public class App
             e.printStackTrace();
         }
     }
-
+    //output to markdown file for City class
     public void outputCities(ArrayList<city> Cities, String filename){
         // Check Countries is not null
         if (Cities == null) {
@@ -988,7 +1009,7 @@ public class App
             e.printStackTrace();
         }
     }
-
+    //output to markdown file for Report class
     public void outputReport(ArrayList<PopulationReport> Reports, String filename){
         // Check Countries is not null
         if (Reports == null) {
